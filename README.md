@@ -75,10 +75,28 @@ ex) FLUSH PRIVILEGES;
 TABLEを構成するCOLUMNの内容を表示する。（短縮形はDESC）  
 ex) DESCRIBE table\_name;
 
-### INSERT: TABLEデータを新規作成する。  
+### INSERT: TABLEデータを新規作成する  
 新たにデータを追記する。  
 ex) INSERT INTO table\_name (id, name) VALUES (1, 'name');
 
-### UPDATE: TABLEデータの内容を更新する。  
+### UPDATE: TABLEデータの内容を更新する  
 既にあるデータを更新する。  
 ex) UPDATE table\_name SET field\_name = REPLACE(field\_name, 'target\_value', 'replace\_value') WHERE field\_name = 'value';
+
+## リモートでMySQLに接続する
+[SSHのポートフォワーディングでMySQLに接続する方法|株式会社田村倉庫](https://www.tamurasouko.com/?p=1092)の記事にあるとおり。
+MySQLのデフォルトポート3306を開くことなく、SSHでセキュアに接続する方法。  
+
+1. リモートに対してバックグラウンドでSSHポートフォワーディングを実行  
+```
+ssh -f -N -C -L 33306:localhost:3306 username@remote.domain -p 22 -i ~/.ssh/keyfile
+```
+2. ローカルからリモートのMySQLに接続  
+```
+mysql -uroot -p -h 127.0.0.1 --port=33306
+```
+3. 後始末（ポートフォワーディング終了）  
+```
+ps aux | grep -e "ssh"
+kill xxxx
+```
